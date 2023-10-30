@@ -29,10 +29,10 @@ metadata:
   labels:
     app: k8s-doc-example
 spec:
+  type: NodePort #type of service
   selector:
     app: k8s-doc-example
   ports:
-    - protocol: TCP
+    - name: http
       port: 8088 #where the service is running.
       targetPort: 8088 #the port exposed by the service.
-  type: NodePort #type of service
