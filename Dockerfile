@@ -1,5 +1,5 @@
 FROM maven:3.9.4-eclipse-temurin-17-alpine as build
-RUN -mkidir -p /app
+RUN mkidir -p /app
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
