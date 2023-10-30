@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-doc-example
+  labels:
+    app: k8s-doc-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-doc-example
+  template:
+    metadata:
+      name: k8s-doc-example
+      labels:
+        app: k8s-doc-example
+    spec:
+      containers:
+        - name: k8s-doc-example
+          image: backend/containerdemo:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8088
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-doc-example
+  labels:
+    app: k8s-doc-example
+spec:
+  selector:
+    app: k8s-doc-example
+  ports:
+    - protocol: TCP
+      port: 8088 #where the service is running.
+      targetPort: 8088 #the port exposed by the service.
+  type: NodePort #type of service
