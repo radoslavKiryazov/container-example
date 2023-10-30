@@ -5,10 +5,10 @@ metadata:
   labels:
     app: k8s-doc-example
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: k8s-doc-example
+  replicas: 2
   template:
     metadata:
       name: k8s-doc-example
@@ -21,7 +21,6 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8088
-      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
