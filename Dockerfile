@@ -7,6 +7,6 @@ RUN mvn -B package --file pom.xml -Dskiptests
 
 
 FROM eclipse-temurin:17-alpine
-EXPOSE 8088
+EXPOSE 8383
 COPY --from=build /app/target/*.jar container-example-0.0.1-SNAPSHOT.jar
 ENTRYPOINT ["java", "-jar","container-example-0.0.1-SNAPSHOT.jar"]
