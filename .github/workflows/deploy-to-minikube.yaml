@@ -5,40 +5,45 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
   job1:
     name: Build and Deploy to Minikube
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Start Minikube
         id: minikube
         uses: medyagh/setup-minikube@latest
+
       - name: Try the cluster
         run: kubectl get pods -A
+
       - name: Build Image
         run: |
-         export SHELL=/bin/bash 
-         eval $(minikube -p minikube docker-env)
-         docker build -f ./Dockerfile -t local/containers-demo .
-         echo -n "Verifying images: "
-         docker images
+          eval $(minikube -p minikube docker-env)
+          docker build -f ./Dockerfile -t local/containers-demo .
+          echo -n "Verifying images: "
+          docker images
+
       - name: Deploy to Minikube
         run: |
           kubectl apply -f deployment.yaml
           kubectl describe deployment k8s-doc-example
           kubectl wait --for=condition=Ready pods -l app=k8s-doc-example
           kubectl get all
+
       - name: Test Service URLs
         run: |
-          echo "SERVICE_URL=$(minikube service containers-example --url)"
-          kubectl port-forward service/containers-example 8088:8088 &> /dev/null &
+          echo "SERVICE_URL=$(minikube service k8s-doc-example --url)"
+          kubectl port-forward service/k8s-doc-example 8088:8088 &> /dev/null &
           sleep 5
-          kubectl port-forward service/containers-example 8088:8088 &> /dev/null &
-      - run:
           curl -i http://localhost:8088/
+
       - name: Cleanup
         run: |
           eval $(minikube docker-env -u)
           minikube delete
-        
