@@ -1,9 +1,8 @@
 name: CD - Deploy to Minikube using Github Actions
 on:
-  push:
-   branches: [ main ] #main
-  pull_request:
-   branches: [ main ] #main
+  #Trigger the workflow on push from the master/main branch or on pull request
+  workflow_call:
+  workflow_dispatch:
 jobs:
   # Build job
   job1:
@@ -32,11 +31,11 @@ jobs:
       - name: Test service URLs
         run: |
           echo "SERVICE_URL=$(minikube service devops-ci-demo --url)"
-          kubectl port-forward service/devops-ci-demo 8080:8080 &> /dev/null &
+          kubectl port-forward service/devops-ci-demo 8383:8383 &> /dev/null &
           sleep 5
-          kubectl port-forward service/devops-ci-demo 8080:8080 &> /dev/null &
+          kubectl port-forward service/devops-ci-demo 8383:8383 &> /dev/null &
       - run: |
-          curl -i http://localhost:8080/
+          curl -i http://localhost:8383/
       - name: Cleanup
         run: |
           eval $(minikube docker-env -u)
